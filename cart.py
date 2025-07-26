@@ -49,6 +49,7 @@ def update_totals(cart, total_label, discount_label, tax_label, final_label, dis
     tax = subtotal * tax_rate
     final = subtotal + tax
 
+
     discount_label.config(text=f"Discount: Rs {discount_amount:.2f}")
     tax_label.config(text=f"Tax: Rs {tax:.2f}")
     final_label.config(text=f"Total: Rs {final:.2f}")
