@@ -137,7 +137,7 @@ def show_register(callback_after_register, login_window):
     # Role (row 5)
     tk.Label(form_frame, text="Register As:", font=("Arial", 10), bg="#f5f5f5").grid(row=5, column=0, padx=10, pady=5, sticky="e")
     role_var = tk.StringVar()
-    role_box = ttk.Combobox(form_frame, textvariable=role_var, values=["Admin", "Staff"], width=27)
+    role_box = ttk.Combobox(form_frame, textvariable=role_var, values=["Admin", "Customer"], width=27)
     role_box.grid(row=5, column=1, pady=5)
 
     # Buttons

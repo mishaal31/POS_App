@@ -44,8 +44,8 @@ def show_admin_panel():
         # --- Table with scrollbar ---
         table_frame = tk.Frame(inv_win)
         table_frame.pack(expand=True, fill="both", padx=10, pady=10)
+        columns = ("ID", "Name", "Price", "Category", "Remaining Pieces")
 
-        columns = ("ID", "Name", "Price", "Category")
         scrollbar = tk.Scrollbar(table_frame)
         scrollbar.pack(side="right", fill="y")
 
@@ -63,7 +63,7 @@ def show_admin_panel():
             tree.delete(*tree.get_children())
             conn = connect_db()
             cursor = conn.cursor()
-            cursor.execute("SELECT id, name, price, category FROM products")
+            cursor.execute("SELECT id, name, price, category, remaining_pieces FROM products")
             for row in cursor.fetchall():
                 tree.insert("", "end", values=row)
             conn.close()
@@ -127,7 +127,7 @@ def show_admin_panel():
             if not selected:
                 messagebox.showerror("Error", "No product selected.")
                 return
-            pid, name, price, cat = tree.item(selected)['values']
+            pid, name, price, cat, _ = tree.item(selected)['values']
 
             def save():
                 new_name = name_var.get()

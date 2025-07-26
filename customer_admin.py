@@ -35,26 +35,21 @@ def open_admin_customer_window(admin_root=None):
     tk.Button(btn_frame, text="Delete", bg="#F3EDED", command=lambda: delete_customer()).pack(side="left", padx=5)
     tk.Button(btn_frame, text="Refresh", bg="#F3EDED", command=lambda: refresh_table()).pack(side="left", padx=5)
 
-    # Define only registration fields
-    columns = ("ID", "Name", "Email", "Phone", "Address", "Points")
+    columns = ("ID", "Name", "Username", "Email", "Address")
 
     table_frame = tk.Frame(cust_win)
     table_frame.pack(fill="both", expand=True, padx=10, pady=10)
-
-    vsb = tk.Scrollbar(table_frame, orient="vertical")
-    vsb.pack(side="right", fill="y")
 
     hsb = tk.Scrollbar(table_frame, orient="horizontal")
     hsb.pack(side="bottom", fill="x")
 
     tree = ttk.Treeview(table_frame, columns=columns, show="headings",
-                        yscrollcommand=vsb.set, xscrollcommand=hsb.set)
-    vsb.config(command=tree.yview)
+                        xscrollcommand=hsb.set)
     hsb.config(command=tree.xview)
 
     for col in columns:
         tree.heading(col, text=col)
-        tree.column(col, width=140, anchor="center")
+        tree.column(col, width=180, anchor="center")
 
     tree.pack(fill="both", expand=True)
 
@@ -63,7 +58,7 @@ def open_admin_customer_window(admin_root=None):
         try:
             conn = connect_db()
             cursor = conn.cursor()
-            cursor.execute("SELECT id, name, email, phone, address, points FROM customers")
+            cursor.execute("SELECT id, name, username, email, address FROM users WHERE role = 'customer'")
             for row in cursor.fetchall():
                 tree.insert("", "end", values=row)
             cursor.close()
@@ -76,7 +71,7 @@ def open_admin_customer_window(admin_root=None):
         popup.title("Add Customer")
         popup.geometry("350x400")
 
-        fields = ["Name", "Email", "Phone", "Address"]
+        fields = ["Name", "Username", "Email", "Address"]
         vars = {}
 
         for f in fields:
@@ -88,8 +83,8 @@ def open_admin_customer_window(admin_root=None):
             try:
                 conn = connect_db()
                 cursor = conn.cursor()
-                cursor.execute("INSERT INTO customers (name, email, phone, address) VALUES (%s, %s, %s, %s)",
-                               (vars["Name"].get(), vars["Email"].get(), vars["Phone"].get(), vars["Address"].get()))
+                cursor.execute("INSERT INTO users (name, username, email, address, role) VALUES (%s, %s, %s, %s, 'customer')",
+                               (vars["Name"].get(), vars["Username"].get(), vars["Email"].get(), vars["Address"].get()))
                 conn.commit()
                 conn.close()
                 popup.destroy()
@@ -112,7 +107,7 @@ def open_admin_customer_window(admin_root=None):
         popup.title("Edit Customer")
         popup.geometry("350x400")
 
-        fields = ["Name", "Email", "Phone", "Address"]
+        fields = ["Name", "Username", "Email", "Address"]
         vars = {}
 
         for i, f in enumerate(fields):
@@ -124,8 +119,8 @@ def open_admin_customer_window(admin_root=None):
             try:
                 conn = connect_db()
                 cursor = conn.cursor()
-                cursor.execute("UPDATE customers SET name=%s, email=%s, phone=%s, address=%s WHERE id=%s",
-                               (vars["Name"].get(), vars["Email"].get(), vars["Phone"].get(), vars["Address"].get(), cid))
+                cursor.execute("UPDATE users SET name=%s, username=%s, email=%s, address=%s WHERE id=%s",
+                               (vars["Name"].get(), vars["Username"].get(), vars["Email"].get(), vars["Address"].get(), cid))
                 conn.commit()
                 conn.close()
                 popup.destroy()
@@ -147,7 +142,7 @@ def open_admin_customer_window(admin_root=None):
             try:
                 conn = connect_db()
                 cursor = conn.cursor()
-                cursor.execute("DELETE FROM customers WHERE id=%s", (cid,))
+                cursor.execute("DELETE FROM users WHERE id=%s", (cid,))
                 conn.commit()
                 conn.close()
                 refresh_table()
