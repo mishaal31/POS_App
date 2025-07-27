@@ -36,10 +36,10 @@ def show_admin_panel():
         btn_frame = tk.Frame(top_frame)
         btn_frame.pack(side="right")
 
-        tk.Button(btn_frame, text="➕ Add", bg="#F3EDED", command=lambda: add_product()).pack(side="left", padx=5)
-        tk.Button(btn_frame, text="✏️ Edit", bg="#F3EDED", command=lambda: edit_product()).pack(side="left", padx=5)
-        tk.Button(btn_frame, text="🗑️ Delete", bg="#F3EDED", command=lambda: delete_product()).pack(side="left", padx=5)
-        tk.Button(btn_frame, text="🔁 Refresh", bg="#F3EDED", command=lambda: refresh_products()).pack(side="left", padx=5)
+        tk.Button(btn_frame, text="Add", bg="#F3EDED", command=lambda: add_product()).pack(side="left", padx=5)
+        tk.Button(btn_frame, text="Edit", bg="#F3EDED", command=lambda: edit_product()).pack(side="left", padx=5)
+        tk.Button(btn_frame, text="Delete", bg="#F3EDED", command=lambda: delete_product()).pack(side="left", padx=5)
+        tk.Button(btn_frame, text="Refresh", bg="#F3EDED", command=lambda: refresh_products()).pack(side="left", padx=5)
 
         # --- Table with scrollbar ---
         table_frame = tk.Frame(inv_win)
@@ -193,6 +193,6 @@ def show_admin_panel():
     # ---- Admin Main Buttons ----
     tk.Label(admin_root, text="Admin Dashboard", font=("Arial", 16, "bold")).pack(pady=10)
     tk.Button(admin_root, text="Manage Inventory", width=25, bg="#87CEFA", command=open_inventory_window).pack(pady=10)
-    tk.Button(admin_root, text="👤 Customer Info", width=25, bg="#90EE90", command=lambda: open_admin_customer_window(admin_root)).pack()
+    tk.Button(admin_root, text="Customer Info", width=25, bg="#90EE90", command=lambda: open_admin_customer_window(admin_root)).pack()
 
     admin_root.mainloop()
