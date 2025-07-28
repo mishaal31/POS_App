@@ -42,19 +42,24 @@ def show_main_pos():
 
     tk.Label(cart_frame, text="Cart").pack(pady=5)
 
+    # Setup cart UI and get UI elements
     cart_ui = setup_cart_ui(cart_frame)
     cart_listbox, total_label, discount_label, tax_label, final_label = cart_ui
 
+    # Remove item button
     tk.Button(cart_frame, text="Remove Item", command=lambda: remove_selected_item(
         cart, cart_listbox, total_label, discount_label, tax_label, final_label, discount_var, payment_method
     )).pack(pady=2)
 
+    # Payment method selection
     tk.Label(cart_frame, text="Payment Method:").pack(pady=2)
     tk.Radiobutton(cart_frame, text="Cash", variable=payment_method, value="Cash").pack()
     tk.Radiobutton(cart_frame, text="Card", variable=payment_method, value="Card").pack()
 
+    # ✅ Corrected Checkout Button
     tk.Button(cart_frame, text="Checkout", command=lambda: show_receipt(
-        root, cart, payment_method, discount_var)).pack(pady=10)
+        root, cart, cart_listbox, total_label, discount_label, tax_label, final_label, payment_method, discount_var
+    )).pack(pady=10)
 
     # Show all products initially
     show_category("All", product_frame, products, cart, cart_listbox,

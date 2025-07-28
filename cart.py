@@ -63,3 +63,11 @@ def update_totals(cart, total_label, discount_label, tax_label, final_label, dis
     total_label.config(text=f"Subtotal: Rs {total:.2f}")
     tax_label.config(text=f"Tax: Rs {tax:.2f}")
     final_label.config(text=f"Total: Rs {final:.2f}")
+
+def clear_cart(cart, cart_listbox, total_label, discount_label, tax_label, final_label):
+    cart.clear()
+    cart_listbox.delete(0, END)
+    total_label.pack_forget()
+    discount_label.pack_forget()
+    tax_label.pack_forget()
+    final_label.pack_forget()

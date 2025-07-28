@@ -5,8 +5,9 @@ from fpdf import FPDF
 from datetime import datetime
 import os
 import random
+from cart import clear_cart  # make sure this is defined in cart.py
 
-def show_receipt(root, cart, payment_method, discount_var):
+def show_receipt(root, cart, cart_listbox, total_label, discount_label, tax_label, final_label, payment_method, discount_var):
     if not cart:
         messagebox.showwarning("Warning", "Cart is empty!")
         return
@@ -23,8 +24,6 @@ def show_receipt(root, cart, payment_method, discount_var):
     receipt.geometry("400x500+300+200")
     receipt.lift()
     receipt.focus_force()
-
-    receipt.title("Receipt")
 
     text = tk.Text(receipt, width=50, height=25)
     text.pack()
@@ -45,15 +44,13 @@ def show_receipt(root, cart, payment_method, discount_var):
 
     # Items
     for item in cart:
-        name = item['name'][:20]  # limit to 20 chars
+        name = item['name'][:20]
         price = f"{item['price']:.2f}"
         text.insert(tk.END, f"{name:20}{price:>20}\n")
         lines.append(f"{name:20}{price:>20}")
 
     # Calculations
     total = sum(item["price"] for item in cart)
-    
-
     tax_percent = 15 if payment_method.get() == "Cash" else 5
     tax_amount = total * tax_percent / 100
     grand_total = total + tax_amount
@@ -112,4 +109,5 @@ def show_receipt(root, cart, payment_method, discount_var):
     conn.commit()
     conn.close()
 
-
+    # --- Clear the cart after checkout ---
+    clear_cart(cart, cart_listbox, total_label, discount_label, tax_label, final_label)
