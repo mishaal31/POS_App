@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
-from db import connect_db  # Ensure your db.py has connect_db()
+from db import connect_db 
 from customer_admin import open_admin_customer_window
 
 def show_admin_panel():
@@ -44,7 +44,7 @@ def show_admin_panel():
         # --- Table with scrollbar ---
         table_frame = tk.Frame(inv_win)
         table_frame.pack(expand=True, fill="both", padx=10, pady=10)
-        columns = ("ID", "Name", "Price", "Category", "Remaining Pieces")
+        columns = ("ID", "Name", "Price", "Category", "Pieces")
 
         scrollbar = tk.Scrollbar(table_frame)
         scrollbar.pack(side="right", fill="y")
@@ -63,7 +63,7 @@ def show_admin_panel():
             tree.delete(*tree.get_children())
             conn = connect_db()
             cursor = conn.cursor()
-            cursor.execute("SELECT id, name, price, category, remaining_pieces FROM products")
+            cursor.execute("SELECT id, name, price, category, pieces FROM products")
             for row in cursor.fetchall():
                 tree.insert("", "end", values=row)
             conn.close()

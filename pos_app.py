@@ -49,10 +49,6 @@ def show_main_pos():
         cart, cart_listbox, total_label, discount_label, tax_label, final_label, discount_var, payment_method
     )).pack(pady=2)
 
-    tk.Label(cart_frame, text="Select Discount:").pack(pady=2)
-    discount_menu = ttk.Combobox(cart_frame, textvariable=discount_var, values=["0", "5", "10", "20", "30", "40", "50"])
-    discount_menu.pack()
-
     tk.Label(cart_frame, text="Payment Method:").pack(pady=2)
     tk.Radiobutton(cart_frame, text="Cash", variable=payment_method, value="Cash").pack()
     tk.Radiobutton(cart_frame, text="Card", variable=payment_method, value="Card").pack()

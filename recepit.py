@@ -52,17 +52,14 @@ def show_receipt(root, cart, payment_method, discount_var):
 
     # Calculations
     total = sum(item["price"] for item in cart)
-    discount_percent = int(discount_var.get())
-    discount_amount = total * discount_percent / 100
-    subtotal = total - discount_amount
+    
 
     tax_percent = 15 if payment_method.get() == "Cash" else 5
-    tax_amount = subtotal * tax_percent / 100
-    grand_total = subtotal + tax_amount
+    tax_amount = total * tax_percent / 100
+    grand_total = total + tax_amount
 
     text.insert(tk.END, "-"*42 + "\n")
     text.insert(tk.END, f"{'Total:':20}{total:>20.2f}\n")
-    text.insert(tk.END, f"{'Discount (' + str(discount_percent) + '%):':20}- {discount_amount:>19.2f}\n")
     text.insert(tk.END, f"{'Tax (' + str(tax_percent) + '%):':20}{tax_amount:>20.2f}\n")
     text.insert(tk.END, f"{'Grand Total:':20}{grand_total:>20.2f}\n")
     text.insert(tk.END, f"{'Paid via:':20}{payment_method.get():>20}\n")
@@ -70,7 +67,6 @@ def show_receipt(root, cart, payment_method, discount_var):
 
     lines.append("-" * 42)
     lines.append(f"{'Total:':20}{total:>20.2f}")
-    lines.append(f"{'Discount (' + str(discount_percent) + '%):':20}- {discount_amount:>19.2f}")
     lines.append(f"{'Tax (' + str(tax_percent) + '%):':20}{tax_amount:>20.2f}")
     lines.append(f"{'Grand Total:':20}{grand_total:>20.2f}")
     lines.append(f"{'Paid via:':20}{payment_method.get():>20}")
