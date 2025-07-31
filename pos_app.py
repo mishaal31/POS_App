@@ -56,7 +56,7 @@ def show_main_pos():
     tk.Radiobutton(cart_frame, text="Cash", variable=payment_method, value="Cash").pack()
     tk.Radiobutton(cart_frame, text="Card", variable=payment_method, value="Card").pack()
 
-    # ✅ Corrected Checkout Button
+    # Corrected Checkout Button
     tk.Button(cart_frame, text="Checkout", command=lambda: show_receipt(
         root, cart, cart_listbox, total_label, discount_label, tax_label, final_label, payment_method, discount_var
     )).pack(pady=10)
