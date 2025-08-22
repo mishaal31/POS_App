@@ -2,7 +2,6 @@ import tkinter as tk
 from tkinter import ttk, messagebox
 from PIL import Image, ImageTk
 from cart import setup_cart_ui, add_to_cart, remove_selected_item
-from customer import open_customer_form
 from registeration import show_login
 from recepit import show_receipt
 from db import connect_db
@@ -11,13 +10,13 @@ from category import get_categories, show_category
 def get_products_from_db():
     conn = connect_db()
     cursor = conn.cursor(dictionary=True)
-    cursor.execute("SELECT name, price, category, image FROM products")
+    cursor.execute("SELECT DISTINCT name, price, category, image FROM products")
     products = cursor.fetchall()
     conn.close()
     return products
 
 def show_main_pos():
-    root = tk.Tk()
+    root = tk.Toplevel()
     root.title("Skincare POS")
     root.geometry("1000x600")
 
@@ -26,7 +25,7 @@ def show_main_pos():
     payment_method = tk.StringVar(value="Cash")
     discount_var = tk.StringVar(value="0")
 
-    # Top frame for Customer + Category only
+    # Top frame for Category only
     top_frame = tk.Frame(root)
     top_frame.pack(side=tk.TOP, fill=tk.X)
 
@@ -56,7 +55,7 @@ def show_main_pos():
     tk.Radiobutton(cart_frame, text="Cash", variable=payment_method, value="Cash").pack()
     tk.Radiobutton(cart_frame, text="Card", variable=payment_method, value="Card").pack()
 
-    # Corrected Checkout Button
+    # Checkout Button
     tk.Button(cart_frame, text="Checkout", command=lambda: show_receipt(
         root, cart, cart_listbox, total_label, discount_label, tax_label, final_label, payment_method, discount_var
     )).pack(pady=10)
@@ -67,3 +66,4 @@ def show_main_pos():
                   discount_var, payment_method, add_to_cart)
 
     root.mainloop()
+

@@ -8,14 +8,13 @@ def show_admin_panel():
     admin_root.title("Admin Panel")
     admin_root.geometry("400x300")
 
-    # ---- Open Inventory Window ----
+    # Open Inventory Window 
     def open_inventory_window():
         admin_root.withdraw()
         inv_win = tk.Toplevel()
         inv_win.title("Product Inventory")
         inv_win.geometry("900x600")
 
-        # --- BACK BUTTON ---
         def go_back():
             inv_win.destroy()
             admin_root.deiconify()
@@ -23,16 +22,14 @@ def show_admin_panel():
         tk.Button(inv_win, text="← Back", font=("Arial", 10, "bold"),
                   bg="#F3EDED", command=go_back).pack(anchor="w", padx=5, pady=5)
 
-        # --- Top controls (Search + Buttons) ---
         top_frame = tk.Frame(inv_win)
         top_frame.pack(fill="x", padx=10, pady=5)
 
         search_var = tk.StringVar()
-        tk.Label(top_frame, text="🔍 Search:").pack(side="left")
+        tk.Label(top_frame, text="Search:").pack(side="left")
         search_entry = tk.Entry(top_frame, textvariable=search_var, width=30)
         search_entry.pack(side="left", padx=5)
 
-        # Button frame
         btn_frame = tk.Frame(top_frame)
         btn_frame.pack(side="right")
 
@@ -40,8 +37,7 @@ def show_admin_panel():
         tk.Button(btn_frame, text="Edit", bg="#F3EDED", command=lambda: edit_product()).pack(side="left", padx=5)
         tk.Button(btn_frame, text="Delete", bg="#F3EDED", command=lambda: delete_product()).pack(side="left", padx=5)
         tk.Button(btn_frame, text="Refresh", bg="#F3EDED", command=lambda: refresh_products()).pack(side="left", padx=5)
-
-        # --- Table with scrollbar ---
+    
         table_frame = tk.Frame(inv_win)
         table_frame.pack(expand=True, fill="both", padx=10, pady=10)
         columns = ("ID", "Name", "Price", "Category", "Pieces")
@@ -58,7 +54,6 @@ def show_admin_panel():
 
         tree.pack(expand=True, fill="both")
 
-        # --- Function Definitions ---
         def refresh_products():
             tree.delete(*tree.get_children())
             conn = connect_db()
@@ -158,14 +153,12 @@ def show_admin_panel():
 
         refresh_products()
 
-    # ---- Open Customer Window ----
     def open_customer_window():
         admin_root.withdraw()
         cust_win = tk.Toplevel()
         cust_win.title("Customer Info")
         cust_win.geometry("600x400")
 
-        # --- BACK BUTTON ---
         def back():
             cust_win.destroy()
             admin_root.deiconify()
@@ -190,9 +183,16 @@ def show_admin_panel():
 
         refresh_customers()
 
-    # ---- Admin Main Buttons ----
+    def launch_pos_from_button():
+      admin_root.withdraw()  # Hide admin panel
+      from pos_app import show_main_pos
+      show_main_pos()        # This opens POS app with products
+      admin_root.deiconify() # Show admin panel again when POS closes
+
+    # Admin Dashboard UI
     tk.Label(admin_root, text="Admin Dashboard", font=("Arial", 16, "bold")).pack(pady=10)
     tk.Button(admin_root, text="Manage Inventory", width=25, bg="#87CEFA", command=open_inventory_window).pack(pady=10)
     tk.Button(admin_root, text="Customer Info", width=25, bg="#90EE90", command=lambda: open_admin_customer_window(admin_root)).pack()
+    tk.Button(admin_root, text="Open POS View", width=25, bg="#FFB347", command=launch_pos_from_button).pack(pady=10)
 
     admin_root.mainloop()

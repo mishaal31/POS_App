@@ -1,35 +1,30 @@
 import tkinter as tk
 from PIL import Image, ImageTk
 import os
-from cart import add_to_cart
 
-# Categories list
 def get_categories():
     return ["All", "Moisturizers", "Cleansers", "Sunscreen", "Serums"]
 
-# Clear the frame before loading new products
 def clear_frame(frame):
     for widget in frame.winfo_children():
         widget.destroy()
 
-# Main category + product display
 def show_category(selected_category, product_frame, products, cart, cart_listbox,
                   total_label, discount_label, tax_label, final_label,
                   discount_var, payment_method, add_to_cart_func):
-    
+
     clear_frame(product_frame)
 
-    # === Top Frame: Category Button + Search Bar ===
+    # --- Top bar with category dropdown & search ---
     top_frame = tk.Frame(product_frame)
     top_frame.pack(fill=tk.X, pady=5)
 
-    # --- Category Dropdown ---
+    # Category dropdown
     category_btn = tk.Menubutton(top_frame, text="☰ Category", relief=tk.RAISED)
     menu = tk.Menu(category_btn, tearoff=0)
     category_btn.config(menu=menu)
     category_btn.pack(side=tk.LEFT, padx=10)
 
-    # Populate menu with all categories
     for cat in get_categories():
         menu.add_command(label=cat, command=lambda c=cat: show_category(
             c, product_frame, products, cart, cart_listbox,
@@ -37,12 +32,12 @@ def show_category(selected_category, product_frame, products, cart, cart_listbox
             discount_var, payment_method, add_to_cart_func
         ))
 
-    # --- Search Bar ---
+    # Search bar
     search_var = tk.StringVar()
     search_entry = tk.Entry(top_frame, textvariable=search_var, width=30)
     search_entry.pack(side=tk.LEFT, padx=10)
 
-    # === Scrollable Product Display Area ===
+    # --- Scrollable product area ---
     canvas = tk.Canvas(product_frame)
     scrollbar = tk.Scrollbar(product_frame, orient="vertical", command=canvas.yview)
     scrollable_frame = tk.Frame(canvas)
@@ -58,7 +53,7 @@ def show_category(selected_category, product_frame, products, cart, cart_listbox
     canvas.pack(side="left", fill="both", expand=True)
     scrollbar.pack(side="right", fill="y")
 
-    # === Display Filtered Products ===
+    # --- Function to refresh products based on category + search ---
     def update_display():
         for widget in scrollable_frame.winfo_children():
             widget.destroy()
@@ -77,11 +72,11 @@ def show_category(selected_category, product_frame, products, cart, cart_listbox
                 row_frame = tk.Frame(scrollable_frame)
                 row_frame.pack(pady=8)
 
-            frame = tk.Frame(row_frame, bd=2, relief=tk.RIDGE, padx=10, pady=10, width=200, height=260, bg="white")
+            frame = tk.Frame(row_frame, bd=2, relief=tk.RIDGE, padx=10, pady=10,
+                             width=200, height=260, bg="white")
             frame.pack_propagate(0)
             frame.pack(side=tk.LEFT, padx=12)
 
-            # Load image
             image_path = os.path.join("images", product.get("image", "placeholder.png"))
             if not os.path.exists(image_path):
                 image_path = os.path.join("images", "placeholder.png")
@@ -90,18 +85,19 @@ def show_category(selected_category, product_frame, products, cart, cart_listbox
                 img = Image.open(image_path).resize((170, 160))
                 photo = ImageTk.PhotoImage(img.copy())
             except:
-                img = Image.new("RGB", (170, 160), color="gray")
+                from PIL import Image as PILImage
+                img = PILImage.new("RGB", (170, 160), color="gray")
                 photo = ImageTk.PhotoImage(img)
 
             img_label = tk.Label(frame, image=photo, bg="white")
             img_label.image = photo
             img_label.pack()
 
-            # Name and price
-            tk.Label(frame, text=product["name"], font=("Arial", 10, "bold"), wraplength=150, bg="white").pack(pady=(5, 2))
-            tk.Label(frame, text=f"Rs. {product['price']}", font=("Arial", 9), bg="white").pack()
+            tk.Label(frame, text=product["name"], font=("Arial", 10, "bold"),
+                     wraplength=150, bg="white").pack(pady=(5, 2))
+            tk.Label(frame, text=f"Rs. {product['price']}", font=("Arial", 9),
+                     bg="white").pack()
 
-            # Add to cart on click
             def bind_click(widget, p=product):
                 widget.bind("<Button-1>", lambda e: add_to_cart_func(
                     p, cart, cart_listbox, total_label, discount_label, tax_label, final_label,
@@ -112,6 +108,6 @@ def show_category(selected_category, product_frame, products, cart, cart_listbox
             for child in frame.winfo_children():
                 bind_click(child)
 
-    # Search updates product display
+    # Call once for initial display
     search_var.trace("w", lambda *args: update_display())
     update_display()

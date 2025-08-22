@@ -23,7 +23,7 @@ def open_admin_customer_window(admin_root=None):
     top_frame.pack(fill="x", padx=10)
 
     search_var = tk.StringVar()
-    tk.Label(top_frame, text="🔍 Search: ", bg="white").pack(side="left")
+    tk.Label(top_frame, text="Search: ", bg="white").pack(side="left")
     search_entry = tk.Entry(top_frame, textvariable=search_var, width=40)
     search_entry.pack(side="left", padx=5)
 
